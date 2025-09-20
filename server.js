@@ -13,7 +13,7 @@ const app = express();
 
 // ✅ CORS Setup
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:4200"], // React / Angular frontend
+  origin: ["http://localhost:3000", "http://localhost:4200","https://imdhanifa.github.io"], // React / Angular frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 };
@@ -32,7 +32,8 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API for managing personal portfolio (Node + MongoDB) with API Key auth",
     },
-    servers: [{ url: "http://localhost:" + (process.env.PORT || 5000) }],
+    servers: [{ url: "http://localhost:" + (process.env.PORT || 5000) },
+      { url: "https://portfolio-api-w6sj.onrender.com" }],
     components: {
       securitySchemes: {
         ApiKeyAuth: {

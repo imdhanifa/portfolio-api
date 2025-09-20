@@ -8,7 +8,7 @@ const portfolioSchema = new mongoose.Schema(
       summary: String,
     },
     about: {
-      name: String,
+      title: String,
       slogan: String,
       summaries: [String],
     },
@@ -20,17 +20,17 @@ const portfolioSchema = new mongoose.Schema(
       },
     ],
     skills: {
-      Programming: [String],
-      Backend: [String],
-      Frontend: [String],
-      Databases: [String],
-      "DevOps & Tools": [String],
-      Architecture: [String],
+      programming: [String],
+      backend: [String],
+      frontend: [String],
+      databases: [String],
+      devOps_tools: [String],
+      architecture: [String],
     },
     experience: [
       {
         role: String,
-        company: String,
+        organization: String,
         period: String,
         tasks: [String],
         latest: Boolean,
@@ -39,7 +39,7 @@ const portfolioSchema = new mongoose.Schema(
     education: [
       {
         degree: String,
-        school: String,
+        institution: String,
         period: String,
         description: String,
         latest: Boolean,
@@ -53,7 +53,7 @@ const portfolioSchema = new mongoose.Schema(
       linkedin: String,
     },
     githubProfile: String,
-    resumebase64: String,
+    resume: String,
   },
   { collection: "portfolio" }
 );

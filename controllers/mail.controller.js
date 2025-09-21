@@ -1,20 +1,17 @@
-import transporter from "../config/mailer.js";
+import sgMail from "../config/sendgrid.js";
 
-/**
- * Controller: Send Contact Message
- */
-export const sendContactMessage = async (req, res) => {
+export const sendContactMessage = (req, res) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, message: "All fields are required." });
   }
 
-  try {
-    // 1️⃣ Email to portfolio owner
-    await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
+  // 1️⃣ Email to portfolio owner
+  sgMail
+    .send({
+      to: process.env.OWNER_EMAIL,      // your inbox
+      from: process.env.SENDGRID_FROM,    // must be verified sender
       subject: `📩 New Portfolio Contact from ${name}`,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -22,29 +19,30 @@ export const sendContactMessage = async (req, res) => {
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Message:</strong> ${message}</p>
       `,
-    });
+    })
+    .then(() => console.log("✅ Mail sent to portfolio owner"))
+    .catch((err) => console.error("❌ Error sending to owner:", err.response?.body || err.message));
 
-    // 2️⃣ Auto-reply to user
-    await transporter.sendMail({
-      from: `"${process.env.PORTFOLIO_NAME || "My Portfolio"}" <${process.env.EMAIL_USER}>`,
-      to: email,
+  // 2️⃣ Auto-reply to user
+  sgMail
+    .send({
+      to: email,                           // visitor’s email
+      from: process.env.SENDGRID_FROM,     // must be verified in SendGrid
       subject: `✅ Thank you for visiting my portfolio, ${name}!`,
       html: `
         <h2>Hi ${name},</h2>
         <p>Thank you for reaching out through my portfolio website 🎉</p>
         <p>I’ll get back to you as soon as possible.</p>
-        <p>Best regards,
-        <br/>
-        ${process.env.NAME}
-        <br/>
-        <a href="${process.env.LINKEDIN}">LinkedIn</a> | <a href="${process.env.GITHUB}">GitHub</a>
+        <p>Best regards,<br/>
+        ${process.env.NAME || "My Portfolio"}<br/>
+        <a href="${process.env.LINKEDIN || "#"}">LinkedIn</a> | 
+        <a href="${process.env.GITHUB || "#"}">GitHub</a>
         </p>
       `,
-    });
+    })
+    .then(() => console.log(`✅ Auto-reply sent to ${email}`))
+    .catch((err) => console.error("❌ Error sending auto-reply:", err.response?.body || err.message));
 
-    res.status(200).json({ success: true, message: "Message sent successfully!" });
-  } catch (error) {
-    console.error("❌ Email Error:", error.message);
-    res.status(500).json({ success: false, message: "Failed to send message." });
-  }
+  // ✅ Respond immediately without waiting for email to finish
+  res.status(200).json({ success: true, message: "Message is being processed" });
 };

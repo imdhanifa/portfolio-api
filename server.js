@@ -13,7 +13,7 @@ const app = express();
 
 // ✅ CORS Setup
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:4200","https://imdhanifa.github.io"], // React / Angular frontend
+  origin: ["http://localhost:3000", "http://localhost:4200", "https://imdhanifa.github.io"], // React / Angular frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 };
@@ -32,8 +32,10 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API for managing personal portfolio (Node + MongoDB) with API Key auth",
     },
-    servers: [{ url: "http://localhost:" + (process.env.PORT || 5000) },
-      { url: "https://portfolio-api-w6sj.onrender.com" }],
+    servers: [
+      { url: "https://portfolio-api-w6sj.onrender.com" },
+      { url: "http://localhost:" + (process.env.PORT || 5000) }
+    ],
     components: {
       securitySchemes: {
         ApiKeyAuth: {
@@ -58,10 +60,10 @@ app.use("/api/portfolio", apiKeyAuth, portfolioRoute);
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    console.log("✅ MongoDB connected");
+    //console.log("✅ MongoDB connected");
     app.listen(process.env.PORT || 5000, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT || 5000}`);
-      console.log(`📑 Swagger Docs: http://localhost:${process.env.PORT || 5000}/api-docs`);
+      //console.log(`🚀 Server running on port ${process.env.PORT || 5000}`);
+      //console.log(`📑 Swagger Docs: http://localhost:${process.env.PORT || 5000}/api-docs`);
     });
   })
   .catch((err) => console.error("❌ DB Connection Error:", err));

@@ -1,5 +1,14 @@
 import express from "express";
-import Portfolio from "../models/portfolio.model.js";
+import {
+  getPortfolio,
+  createPortfolio,
+  updatePortfolio,
+  deletePortfolio,
+  getViewers,
+  incrementViewers,
+  getLikes,
+  incrementLikes,
+} from "../controllers/portfolio.controller.js";
 
 const router = express.Router();
 
@@ -22,15 +31,7 @@ const router = express.Router();
  *       404:
  *         description: Portfolio not found
  */
-router.get("/", async (req, res) => {
-  try {
-    const portfolio = await Portfolio.findOne();
-    if (!portfolio) return res.status(404).json({ message: "Portfolio not found" });
-    res.json(portfolio);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.get("/", getPortfolio);
 
 /**
  * @swagger
@@ -48,16 +49,7 @@ router.get("/", async (req, res) => {
  *       201:
  *         description: Portfolio created
  */
-router.post("/", async (req, res) => {
-  try {
-    await Portfolio.deleteMany({});
-    const newPortfolio = new Portfolio(req.body);
-    const saved = await newPortfolio.save();
-    res.status(201).json(saved);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+router.post("/", createPortfolio);
 
 /**
  * @swagger
@@ -84,19 +76,7 @@ router.post("/", async (req, res) => {
  *       404:
  *         description: Portfolio not found
  */
-router.put("/:id", async (req, res) => {
-  try {
-    const updatedPortfolio = await Portfolio.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedPortfolio) return res.status(404).json({ message: "Portfolio not found" });
-    res.json(updatedPortfolio);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+router.put("/:id", updatePortfolio);
 
 /**
  * @swagger
@@ -117,14 +97,85 @@ router.put("/:id", async (req, res) => {
  *       404:
  *         description: Portfolio not found
  */
-router.delete("/:id", async (req, res) => {
-  try {
-    const deletedPortfolio = await Portfolio.findByIdAndDelete(req.params.id);
-    if (!deletedPortfolio) return res.status(404).json({ message: "Portfolio not found" });
-    res.json({ message: "Portfolio deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.delete("/:id", deletePortfolio);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Portfolio
+ *   description: Portfolio management
+ */
+
+/**
+ * @swagger
+ * /api/portfolio/viewers:
+ *   get:
+ *     summary: Get current viewers count
+ *     tags: [Portfolio]
+ *     responses:
+ *       200:
+ *         description: Current viewers count
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 viewers:
+ *                   type: integer
+ *                   example: 10
+ *   post:
+ *     summary: Increment viewers count
+ *     tags: [Portfolio]
+ *     responses:
+ *       200:
+ *         description: Updated viewers count
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 viewers:
+ *                   type: integer
+ *                   example: 11
+ */
+router.get("/viewers", getViewers);
+
+router.post("/viewers", incrementViewers);
+
+/**
+ * @swagger
+ * /api/portfolio/likes:
+ *   get:
+ *     summary: Get current likes count
+ *     tags: [Portfolio]
+ *     responses:
+ *       200:
+ *         description: Current likes count
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 likes:
+ *                   type: integer
+ *                   example: 25
+ *   post:
+ *     summary: Increment likes count
+ *     tags: [Portfolio]
+ *     responses:
+ *       200:
+ *         description: Updated likes count
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 likes:
+ *                   type: integer
+ *                   example: 26
+ */
+router.get("/likes", getLikes);
+router.post("/likes", incrementLikes);
 
 export default router;
+

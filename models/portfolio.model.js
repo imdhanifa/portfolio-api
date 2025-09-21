@@ -53,9 +53,30 @@ const portfolioSchema = new mongoose.Schema(
       linkedin: String,
     },
     githubProfile: String,
+    githubUsername: String,
     resume: String,
+    viewers: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
   },
-  { collection: "portfolio" }
+  {
+    collection: "portfolio",
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform: function (doc, ret) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      versionKey: false,
+      transform: function (doc, ret) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+      },
+    },
+  }
 );
 
 export default mongoose.model("Portfolio", portfolioSchema);

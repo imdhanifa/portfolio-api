@@ -1,11 +1,7 @@
 import express from "express";
 import {
-  getPortfolio,
-  createPortfolio,
-  updatePortfolio,
-  deletePortfolio,
-  getViewers,
-  incrementViewers,
+  getViews,
+  incrementViews,
   getLikes,
   incrementLikes,
 } from "../controllers/portfolio.controller.js";
@@ -21,100 +17,13 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/portfolio:
+ * /api/portfolio/views:
  *   get:
- *     summary: Get portfolio
+ *     summary: Get current views count
  *     tags: [Portfolio]
  *     responses:
  *       200:
- *         description: Portfolio data
- *       404:
- *         description: Portfolio not found
- */
-router.get("/", getPortfolio);
-
-/**
- * @swagger
- * /api/portfolio:
- *   post:
- *     summary: Create portfolio
- *     tags: [Portfolio]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *     responses:
- *       201:
- *         description: Portfolio created
- */
-router.post("/", createPortfolio);
-
-/**
- * @swagger
- * /api/portfolio/{id}:
- *   put:
- *     summary: Update portfolio by ID
- *     tags: [Portfolio]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: MongoDB document ID
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *     responses:
- *       200:
- *         description: Portfolio updated
- *       404:
- *         description: Portfolio not found
- */
-router.put("/:id", updatePortfolio);
-
-/**
- * @swagger
- * /api/portfolio/{id}:
- *   delete:
- *     summary: Delete portfolio by ID
- *     tags: [Portfolio]
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: MongoDB document ID
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Portfolio deleted
- *       404:
- *         description: Portfolio not found
- */
-router.delete("/:id", deletePortfolio);
-
-/**
- * @swagger
- * tags:
- *   name: Portfolio
- *   description: Portfolio management
- */
-
-/**
- * @swagger
- * /api/portfolio/viewers:
- *   get:
- *     summary: Get current viewers count
- *     tags: [Portfolio]
- *     responses:
- *       200:
- *         description: Current viewers count
+ *         description: Current views count
  *         content:
  *           application/json:
  *             schema:
@@ -124,11 +33,11 @@ router.delete("/:id", deletePortfolio);
  *                   type: integer
  *                   example: 10
  *   post:
- *     summary: Increment viewers count
+ *     summary: Increment views count
  *     tags: [Portfolio]
  *     responses:
  *       200:
- *         description: Updated viewers count
+ *         description: Updated views count
  *         content:
  *           application/json:
  *             schema:
@@ -138,9 +47,8 @@ router.delete("/:id", deletePortfolio);
  *                   type: integer
  *                   example: 11
  */
-router.get("/viewers", getViewers);
-
-router.post("/viewers", incrementViewers);
+router.get("/views", getViews);
+router.post("/views", incrementViews);
 
 /**
  * @swagger

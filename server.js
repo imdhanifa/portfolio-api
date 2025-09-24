@@ -12,7 +12,7 @@ const app = express();
 
 // ✅ CORS Setup
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:4200", "https://imdhanifa.github.io"], // React / Angular frontend
+  origin: ["http://localhost:3000", "https://imdhanifa.info", "https://imdhanifa.github.io"], // React / Angular frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
 };
